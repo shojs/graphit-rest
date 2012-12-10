@@ -1,0 +1,6 @@
+<?php 
+	$myusers = array();
+	foreach ($users as $user) {
+		array_push($myusers, $user);
+	}
+	echo '"users": ' . Zend\Json\Json::encode($myusers) . ' ';

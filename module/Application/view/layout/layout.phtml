@@ -1,0 +1,32 @@
+<?php 
+$pat = '/^(application\/json)$/';
+if (preg_match($pat, $_SERVER['HTTP_ACCEPT'])) {
+header('Cache-Control: no-cache, must-revalidate');
+header('Expires: Mon, 01 Jan 1970 00:00:00 GMT');
+header('Content-type: application/json');
+
+$str=<<<END
+{ 
+ "type": "graphit-api",
+ "version": "0.1",
+ "time": "<?php echo time(); ?>",
+ <?php echo $this->content; ?>
+}
+END;
+
+echo $str;
+} else {
+$str=<<<END
+<doctype html>
+<html>
+<head></head>
+<body>
+	$this->content;
+</body>
+</html>
+END;
+
+echo $str;
+}
+
+?>

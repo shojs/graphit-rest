@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<?php echo $gi->echo_js_libs('../../../'); ?>
+<script type="text/javascript">
+  google.load("identitytoolkit", "2", {packages: ["ac"], language: 'en'});
+<?php if (0 && $gi->get('verifiedEmail')) : ?>
+   jQuery(function() {
+     var homeUrl = '/php/GoogleIdentity2/start/'; // Your home page URL.
+     var account = {
+       email:       '<?php echo $gi->get("verifiedEmail"); ?>', // required
+       displayName: '<?php echo $gi->get("displayName"); ?>', // optional
+       photoUrl:    '<?php echo $gi->get("photoUrl"); ?>'  // optional
+     };
+     // Store the account then return to homeUrl.
+     window.google.identitytoolkit.storeAccount(account, null);
+     window.google.identitytoolkit.loadAccount(account);
+ });
+ <?php endif; ?>
+
+ $(function() {
+  window.google.identitytoolkit.setConfig({
+   developerKey: '<?php echo $conf->get("developerKey"); ?>',
+   companyName : '<?php echo $conf->get("companyName"); ?>',
+   callbackUrl : '<?php echo $conf->get("callbackUrl"); ?>',
+   realm: "",
+   userStatusUrl: "/gi/statusUrl",
+   loginUrl: "/gi/login",
+   signupUrl:"/gi/signup",
+   homeUrl:  "/gi/home",
+   logoutUrl: "/gi/logout",
+   idps: ["Gmail", "Yahoo"],
+   idpConfig: {
+     Gmail: {
+       scopes: [
+         "https://www.googleapis.com/auth/plus.me"
+                ],
+     }
+   },
+   tryFederatedFirst: true,
+   language: "en",
+   useContextParam: true,
+   useCachedUserStatus: true,
+  });
+  console.log('init google toolkit');
+    window.google.identitytoolkit.init();
+    var conf = window.graphit.auth;
+ <?php
+/* Feed our Javascript Object */
+if ($gi->get('verifiedEmail')) {
+	echo $gi->js_fill_conf();
+}
+ ?>
+   var userData = {};
+ <?php if ($gi->get('verifiedEmail')) : ?>
+  userData = {
+       email: conf.get("verifiedEmail"),
+       displayName: conf.get("displayName"),
+       legacy: conf.get("legacy"),
+       photoUrl: conf.get("photoUrl")
+   };
+ <?php endif; ?>
+  console.log('userData',userData);
+   window.google.identitytoolkit.updateSavedAccount(userData);
+ });
+ </script>
+
+</head>
+<body>
+
+</script>
+</body>
+</html>

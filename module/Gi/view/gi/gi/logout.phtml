@@ -1,0 +1,10 @@
+<?php
+require_once('/vendor/GoogleIdentity/Message.php');
+use vendor\GoogleIdentity\GoogleIdentity_Message;
+if ($gi->get('verifiedEmail')) {
+ error_log('Logout user: ' . $gi->get('verifiedEmail'));
+}
+$gi->session_destroy();
+$message = new GoogleIdentity_Message('logout', 'logout successfull', 1);
+echo $message->to_json();
+?>

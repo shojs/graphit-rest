@@ -1,0 +1,12 @@
+<?php 
+    $data = array(
+    	"message" => $this->exception->getMessage(),
+    	"file" => $this->exception->getFile(),
+    	"line" => $this->exception->getLine(),
+    	"trace" => $this->exception->getTraceAsString(),
+    );
+    if (isset($this->exception->data)) {
+    	$data['data'] = $this->exception->data;
+    };
+	echo '"error": ' . Zend\Json\Json::encode($data);
+?>
